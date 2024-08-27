@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 
 // Mocked DB
 interface Post {
@@ -35,6 +36,6 @@ export const postRouter = createTRPCRouter({
     }),
 
   getLatest: publicProcedure.query(() => {
-    return posts.at(-1) ?? null;
+    throw new TRPCError({ code: "FORBIDDEN" });
   }),
 });
