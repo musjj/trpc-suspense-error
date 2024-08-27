@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import { LatestPost } from "@/app/_components/post";
 import { api, HydrateClient } from "@/trpc/server";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
@@ -44,8 +46,11 @@ export default async function Home() {
               {hello ? hello.greeting : "Loading tRPC query..."}
             </p>
           </div>
-
-          <LatestPost />
+          <ErrorBoundary fallback={<div>ERROR!!!</div>}>
+            <Suspense fallback={<div>LOADING...</div>}>
+              <LatestPost />
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </main>
     </HydrateClient>
